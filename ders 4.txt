@@ -1,0 +1,163 @@
+--1  butun isciler ucun soyadi departmenti bide department numberi yaz
+SELECT 
+    e.LAST_NAME, 
+    e.DEPARTMENT_ID, 
+    d.DEPARTMENT_NAME
+FROM 
+    HR.EMPLOYEES e
+JOIN 
+    HR.DEPARTMENTS d 
+ON 
+    e.DEPARTMENT_ID = d.DEPARTMENT_ID;
+
+
+
+
+
+--2  creating a uniqie listing  of all  jobs that are in department 30.include the location of department 90 in the output  
+SELECT DISTINCT 
+    e.job_id, 
+    d.location_id AS "dept_90_location"
+FROM 
+    HR.employees e
+JOIN 
+    HR.departments d 
+ON 
+    d.department_id = 90
+WHERE 
+    e.department_id = 30;
+
+--3 write a querry  to display the employee last name , department name, location id and city of all employees who earn a commission
+SELECT 
+    e.last_name, 
+    d.department_name, 
+    l.location_id, 
+    l.city
+FROM 
+    HR.employees e
+JOIN 
+    HR.departments d 
+    ON e.department_id = d.department_id
+JOIN 
+    HR.locations l 
+    ON d.location_id = l.location_id
+WHERE 
+    e.commission_pct IS NOT NULL;
+
+
+--4  display the employee last name and department name for all employees who have an a lovercase in their last names. 
+SELECT 
+    e.last_name, 
+    d.department_name
+FROM 
+    HR.employees e
+JOIN 
+    HR.departments d 
+    ON e.department_id = d.department_id
+WHERE 
+    REGEXP_LIKE(e.last_name, '[a-z]');
+
+--5 write a query to display the last name,job , department number, and department name for all employees who work in Toronto
+SELECT 
+    e.last_name, 
+    e.job_id, 
+    e.department_id, 
+    d.department_name
+FROM 
+    HR.employees e
+JOIN 
+    HR.departments d 
+    ON e.department_id = d.department_id
+JOIN 
+    HR.locations l 
+    ON d.location_id = l.location_id
+WHERE 
+    l.city = 'Toronto';
+--6  display the employee lastname and employee number along with their manager
+ last name and manageer number .label the columns employee,emp#,manager and mgr# respecitevly
+SELECT 
+    e.last_name AS "Employee", 
+    e.employee_id AS "Emp#", 
+    m.last_name AS "Manager", 
+    m.employee_id AS "Mgr#"
+FROM 
+    HR.employees e
+LEFT JOIN 
+    HR.employees m 
+    ON e.manager_id = m.employee_id;
+
+
+--7  display all employees including King who has no manager .Order the result by the employee number
+SELECT 
+    e.last_name AS "Employee", 
+    e.employee_id AS "Emp#", 
+    e.manager_id AS "Manager ID"
+FROM 
+    HR.employees e
+LEFT JOIN 
+    HR.employees m 
+    ON e.manager_id = m.employee_id
+ORDER BY 
+    e.employee_id;
+
+--8  create a querry that displays employee last names , department numbers , 
+and all the employees who work in the same department as a given employee.Give each column an appropriate label.
+
+
+SELECT 
+    e1.last_name AS "Employee Last Name", 
+    e1.department_id AS "Department #", 
+    e2.last_name AS "Co-Worker Last Name"
+FROM 
+    HR.employees e1
+JOIN 
+    HR.employees e2 
+    ON e1.department_id = e2.department_id
+WHERE 
+    e1.employee_id = 101
+    AND e1.employee_id != e2.employee_id
+ORDER BY 
+    e2.last_name;
+
+--9  show the sturucture of the JOB_GRADES table.
+create a query that displays the name ,
+ job, department name, salary,and grade for all employees
+
+SELECT 
+    e.last_name AS "Employee Name", 
+    e.job_id AS "Job", 
+    d.department_name AS "Department Name", 
+    e.salary AS "Salary", 
+    j.grade_level AS "Grade"
+FROM 
+    HR.employees e
+JOIN 
+    HR.departments d ON e.department_id = d.department_id
+JOIN 
+    HR.job_grades j ON e.salary BETWEEN j.lowest_salary AND j.highest_salary
+ORDER BY 
+    e.last_name;
+
+
+--10  create a querry to display the name and hire date of any employee hired after employee Davies 
+
+
+SELECT last_name, hire_date
+FROM hr.employees
+WHERE hire_date > (SELECT hire_date FROM hr.employees WHERE last_name = 'Davies');
+
+--11  display the names and hire dates for all employees who were hired 
+before their managers,along with their managers names and hire dates.
+
+SELECT 
+    e.last_name AS Employee_Name, 
+    e.hire_date AS Employee_Hire_Date,
+    m.last_name AS Manager_Name, 
+    m.hire_date AS Manager_Hire_Date
+FROM 
+    hr.employees e
+JOIN 
+    hr.employees m ON e.manager_id = m.employee_id
+WHERE 
+    e.hire_date < m.hire_date;
+
