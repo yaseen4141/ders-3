@@ -1,0 +1,77 @@
+--4  slary max min avg sum goster
+SELECT 
+   ROUND(MAX(salary)) AS Maximum,
+   ROUND(MIN(salary)) AS Minimum,
+   ROUND(SUM(salary)) AS Sum,
+   ROUND(AVG(salary)) AS Average
+FROM hr.employees;
+
+--5 for each job  min max avg sum salary
+SELECT 
+    job_id,
+    ROUND(MAX(salary)) AS "Maximum",
+    ROUND(MIN(salary)) AS "Minimum",
+    ROUND(SUM(salary)) AS "Sum",
+    ROUND(AVG(salary)) AS "Average"
+FROM 
+    hr.employees
+GROUP BY 
+    job_id;
+
+--6 eyni isde isleyen iscilerin sayi
+SELECT job_id,
+    COUNT(*) AS Number_of_Employees
+    FROM hr.employees 
+    GROUP BY job_id;
+
+--7  manager sayi
+
+SELECT 
+   COUNT(DISTINCT manager_id) AS Number_of_Managers
+FROM hr.employees;
+
+--8  max salary ve min salary ferqi
+
+SELECT 
+   MAX(salary) - MIN(salary) AS Salary_Difference
+FROM hr.employees;
+
+--9 To display the manager number and the salary of the lowest-paid employee for that manager, 
+excluding those with unknown managers and groups where the minimum salary is less than $6,000,
+
+SELECT 
+  FROM hr.employees
+WHERE manager_id IS NOT NULL
+GROUP BY manager_id
+HAVING MIN(salary) >= 6000
+ORDER BY Lowest_Salary DESC;
+
+
+--10     manager_id,  department id salary department name yaz.round salary yaz.
+   MIN(salary) AS Lowest_Salary.slaryni two decimal yaz.
+
+SELECT 
+   d.department_name AS Name,
+   COUNT(e.employee_id) AS Number_of_People,
+   ROUND(AVG(e.salary), 2) AS Average_Salary
+FROM 
+   hr.departments d
+JOIN 
+   hr.employees e ON d.department_id = e.department_id
+GROUP BY 
+   d.department_name;
+
+--11    create a querry that will display  the total number of employees and and of that total,
+SELECT 
+    COUNT(*) AS "TOTAL", 
+    COUNT(CASE WHEN EXTRACT(YEAR FROM hire_date) = 1995 THEN 1 END) AS "1995", 
+    COUNT(CASE WHEN EXTRACT(YEAR FROM hire_date) = 1996 THEN 1 END) AS "1996", 
+    COUNT(CASE WHEN EXTRACT(YEAR FROM hire_date) = 1997 THEN 1 END) AS "1997", 
+    COUNT(CASE WHEN EXTRACT(YEAR FROM hire_date) = 1998 THEN 1 END) AS "1998"
+FROM 
+    hr.employees;
+
+
+
+
+
